@@ -40,10 +40,7 @@ const SingleChat = ({ selectedChat }) => {
 
   const [autoSessionExpired, setAutoSessionExpired] = useState(false);
   const [leaveChat, setLeaveChat] = useState(false);
-  const combinedMessages = useMemo(() => {
-    return [...messageHistory, ...messages];
-  }, [messageHistory, messages]);
-
+  const combinedMessages = [...messageHistory, ...messages];
   const [chatStatus, setChatStatus] = useState({});
   const socket = io(SERVER);
   const loadCurrentSession = async (sessionId) => {
@@ -98,7 +95,7 @@ const SingleChat = ({ selectedChat }) => {
     return () => {
       socket.disconnect();
     };
-  }, [loadAllMessages, selectedChat?.session?._id, socket, userInfo._id]);
+  }, [selectedChat?._id]);
 
   useEffect(() => {
     const checkSessionAndChatStatus = async () => {

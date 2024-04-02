@@ -96,7 +96,8 @@ export default function Header() {
     route.push("/login");
   };
 
-  const bookMentorClick = () => {
+  const bookMentorClick = (e) => {
+    e.preventDefault();
     if (userToken && userInfo?.userType === "customer") {
       route.push("/user/book-mentor");
     } else if (userToken && userInfo?.userType === "SME") {
