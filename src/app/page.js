@@ -15,10 +15,8 @@ import {
 } from "./Actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import userServices from "./services/userService";
-import LocomotiveScroll from "locomotive-scroll";
 
 export default function Home() {
-  const locomotiveScroll = new LocomotiveScroll();
 
   const route = useRouter();
   const containerRef = useRef(null);
