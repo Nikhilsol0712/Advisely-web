@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 import {
   ArrowPathIcon,
@@ -18,6 +18,15 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {
+  getToken,
+  getUserType,
+  setUserToken,
+  removeUserToken,
+  removeUserType,
+} from "../../token";
+import { useSelector, useDispatch } from "react-redux";
+import { setToken, setUserType } from "../../Actions/authActions";
 
 const products = [
   {
@@ -60,23 +69,45 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function Header() {
   const route = useRouter();
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const dispatch = useDispatch();
+  const userToken = useSelector((state) => state.auth.token);
+  const userInfo = useSelector((state) => state.auth.userInfo);
+
+  console.log("userToken====", userToken);
+  console.log("userInfo====", userInfo);
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   console.log("token from header===", token);
+  // }, []);
+
+  const handleLogin = () => {
+    route.push("/login");
+  };
+
+  const onLogout = () => {
+    removeUserToken();
+    removeUserType();
+    dispatch(setToken(null));
+    dispatch(setUserType(null));
+    route.push("/login");
+  };
 
   return (
-    <header className="bg-white">
+    <header style={{ zIndex: 999 }} className="bg-white shadow-sm ">
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        className="mx-auto overflow-hidden flex max-w-7xl items-center justify-between h-16  lg:px-8"
         aria-label="Global"
       >
-        <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
+        <div className="flex mt-1  h-full  lg:flex-1">
+          <a href="#" className=" ">
+            {/* <span className="sr-only text-black">Your Company</span> */}
             <img
-              className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+              className="h-full  bg-red-200 w-16 ml-14"
+              src="/logo.jpeg"
               alt=""
             />
           </a>
@@ -91,86 +122,57 @@ export default function Example() {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        <Popover.Group className="hidden lg:flex lg:gap-x-12">
-          <Popover className="relative">
-            <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-              Product
-              <ChevronDownIcon
-                className="h-5 w-5 flex-none text-gray-400"
-                aria-hidden="true"
-              />
-            </Popover.Button>
 
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-200"
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
+        {!userToken && (
+          <Popover.Group className="hidden lg:flex lg:gap-x-12">
+            <a
+              href="#"
+              className="text-sm font-semibold leading-6 text-gray-900"
             >
-              <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                <div className="p-4">
-                  {products.map((item) => (
-                    <div
-                      key={item.name}
-                      className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
-                    >
-                      <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                        <item.icon
-                          className="h-6 w-6 text-gray-600 group-hover:text-indigo-600"
-                          aria-hidden="true"
-                        />
-                      </div>
-                      <div className="flex-auto">
-                        <a
-                          href={item.href}
-                          className="block font-semibold text-gray-900"
-                        >
-                          {item.name}
-                          <span className="absolute inset-0" />
-                        </a>
-                        <p className="mt-1 text-gray-600">{item.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                  {callsToAction.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
-                    >
-                      <item.icon
-                        className="h-5 w-5 flex-none text-gray-400"
-                        aria-hidden="true"
-                      />
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
-              </Popover.Panel>
-            </Transition>
-          </Popover>
+              Book a mentor
+            </a>
+            <a
+              href="#"
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              Find Advisor
+            </a>
+            <a
+              href="#"
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              Company
+            </a>
+          </Popover.Group>
+        )}
 
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Features
-          </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Marketplace
-          </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Company
-          </a>
-        </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <div
-            onClick={() => route.push("login")}
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Log in <span aria-hidden="true">&rarr;</span>
+          <div className="flex w-64 justify-between items-center flex-row">
+            {userToken && (
+              <div
+                onClick={() => route.push("/user/book-mentor")}
+                className="transform hover:scale-105 transition-transform duration-300 font-semibold  leading-6 p-2 rounded-md bg-purple-300 text-white hover:bg-purple-700 hover:cursor-pointer"
+              >
+                Book a mentor
+              </div>
+            )}
+
+            {userToken && (
+              <div
+                // onClick={() => route.push("/user/profile")}
+                className=" uppercase hover:cursor-pointer rounded-full flex text-center items-center justify-center h-8 p-1 w-8 bg-red-400"
+              >
+                {userInfo?.firstName[0]}
+                {userInfo?.lastName[0]}
+              </div>
+            )}
+
+            <div
+              onClick={userToken ? onLogout : handleLogin}
+              className=" flex border  hover:cursor-pointer border-gray-400 p-1 px-2 text-xs font-medium text-black hover:shadow items-center rounded-md "
+            >
+              {userToken !== null ? "Logout" : "Login"}
+            </div>
           </div>
         </div>
       </nav>
@@ -180,7 +182,7 @@ export default function Example() {
         open={mobileMenuOpen}
         onClose={setMobileMenuOpen}
       >
-        <div className="fixed inset-0 z-10" />
+        <div style={{ zIndex: 999 }} className="fixed inset-0 " />
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <a href="#" className="-m-1.5 p-1.5">

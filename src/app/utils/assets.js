@@ -1,7 +1,12 @@
+
 import { Poppins } from "next/font/google";
+import axios from "axios";
+export const BASE_URL = "https://advisely-backend.onrender.com/api/v1";
+export const IMAGE_SOURCE = "https://advisely-backend.onrender.com/uploads/";
+export const SERVER = "https://advisely-backend.onrender.com/";
 
 export const dynamicUI = {
-  "COLOR-PRIMARY": "#8C8CFF",
+  "COLOR-PRIMARY": "#977AF1",
   "COLOR-SECONDARY": "#f9b408",
   "COLOR-BLACK": "#000000",
   "COLOR-BLUE": "#004DC1",
@@ -28,3 +33,11 @@ export const dynamicUI = {
     "H-COLOR-BLACK": "#000000",
   },
 };
+
+export const axiosInstance = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+

@@ -2,8 +2,23 @@ import Image from "next/image";
 import { dynamicUI } from "@/app/utils/assets";
 import { Poppins } from "next/font/google";
 const poppins = Poppins({ subsets: ["latin"], weight: "400", style: "normal" });
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 export default function HomeTextTitle() {
+  const { token, userInfo } = useSelector((state) => state.auth);
+  const route = useRouter();
+
+  const onBookSession = async () => {
+    if (token && userInfo?.userType === "customer") {
+      route.push("/user/home");
+    } else if (token && userInfo?.userType === "SME") {
+      route.push("/mentors");
+    } else {
+      route.push("/login");
+    }
+  };
+
   return (
     <div
       style={{ backgroundColor: dynamicUI["COLOR-PRIMARY"] }}
@@ -32,6 +47,7 @@ export default function HomeTextTitle() {
         </p>
         <div className="flex justify-center items-center mb-10 mt-10">
           <button
+            onClick={onBookSession}
             style={{ color: "rgb(151,122,241)" }}
             className=" bg-white w-72 h-12 font-bold rounded-lg"
           >

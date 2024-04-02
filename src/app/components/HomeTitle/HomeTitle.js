@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { dynamicUI } from "@/app/utils/assets";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 const navigation = [
   { name: "Product", href: "#" },
@@ -11,6 +13,19 @@ const navigation = [
 ];
 
 export default function HomeTitle() {
+  const { token, userInfo } = useSelector((state) => state.auth);
+  const route = useRouter();
+
+  const onBookSession = async () => {
+    if (token && userInfo?.userType === "customer") {
+      route.push("/user/home");
+    } else if (token && userInfo?.userType === "SME") {
+      route.push("/mentors");
+    } else {
+      route.push("/login");
+    }
+  };
+
   return (
     <div className=" w-full h-full flex bg-white gap-x-24 justify-center ">
       <div className=" ml-5">
@@ -32,6 +47,7 @@ export default function HomeTitle() {
         </p>
 
         <button
+          onClick={onBookSession}
           style={{ backgroundColor: "rgb(151,122,241)" }}
           className="text-white w-56 h-10 font-bold rounded-lg mt-8 ml-20"
         >

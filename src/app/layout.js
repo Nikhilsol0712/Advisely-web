@@ -1,8 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
-import Example from "./components/Header/Header";
+import Header from "./components/Header/Header";
 import HeroSection from "./components/HeroSection/HeroSection";
+import { Providers } from "./Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,9 +15,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Example></Example>
-        {children}
+      <body className={`${inter.className} h-full w-full`}>
+        <Providers>
+          {/* example as header */}
+          <div style={{ zIndex: 999 }} className="fixed w-full">
+            <Header />
+          </div>
+
+          {children}
+        </Providers>
       </body>
     </html>
   );

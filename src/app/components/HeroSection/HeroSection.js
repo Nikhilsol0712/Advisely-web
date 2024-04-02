@@ -1,16 +1,27 @@
 "use client";
+import React, { useEffect, useRef } from "react";
 
 import Image from "next/image";
 import { dynamicUI } from "@/app/utils/assets";
-
-const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
-  { name: "Company", href: "#" },
-];
+import { gsap } from "gsap";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
+  const textRef = useRef(null);
+  const { token, userInfo } = useSelector((state) => state.auth);
+  const route = useRouter();
+  
+  const onBookSession = async () => {
+    if (token && userInfo?.userType === "customer") {
+      route.push("/user/home");
+    } else if (token && userInfo?.userType === "SME") {
+      route.push("/mentors");
+    } else {
+      route.push("/login");
+    }
+  };
+
   return (
     <div
       style={{ backgroundColor: dynamicUI["COLOR-PRIMARY"] }}
@@ -28,6 +39,7 @@ export default function HeroSection() {
         </p>
 
         <button
+          onClick={onBookSession}
           style={{ color: "rgb(151,122,241)" }}
           className="bg-white w-52 h-10 font-bold rounded-lg mt-4 ml-20"
         >
