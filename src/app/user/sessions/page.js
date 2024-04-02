@@ -12,7 +12,7 @@ import {
   updateSessionFailure,
 } from "../../Actions/sessionActions";
 
-const page = () => {
+const Page = () => {
   const { sessions, sessionUpated } = useSelector((state) => state.session);
   const dispatch = useDispatch();
   const upcomingSessions = Array.isArray(sessions)
@@ -92,4 +92,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

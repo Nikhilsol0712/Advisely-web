@@ -20,7 +20,7 @@ import {
   getAllSmeSuccess,
 } from "../../Actions/userActions";
 
-const page = () => {
+const Page = () => {
   const { allMathcingSME } = useSelector((state) => state.user);
   const { selectedSubCategory } = useSelector((state) => state.subCategory);
   const { AllSme } = useSelector((state) => state.user);
@@ -128,4 +128,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

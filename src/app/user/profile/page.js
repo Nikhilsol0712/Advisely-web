@@ -2,7 +2,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-const page = () => {
+const Page = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
 
   console.log("userInfo====", userInfo);
@@ -36,14 +36,10 @@ const page = () => {
 
       {/* lower section */}
       <div className=" bg-white mt-2 flex justify-center w-full">
-        <form className="p-3 w-full bg-white text-black rounded-lg">
-
-
-
-        </form>
+        <form className="p-3 w-full bg-white text-black rounded-lg"></form>
       </div>
     </div>
   );
 };
 
-export default page;
+export default Page;

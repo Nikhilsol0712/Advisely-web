@@ -47,7 +47,7 @@ export default function HeroSection() {
         </button>
       </div>
       <div className="">
-        <Image width={450} height={500} src="/images/heroSectionImage.jpg" />
+        <Image width={450} height={500} alt="" src="/images/heroSectionImage.jpg" />
       </div>
     </div>
   );

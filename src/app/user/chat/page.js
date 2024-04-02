@@ -10,7 +10,7 @@ import {
   fetchMyChatFailure,
 } from "../../Actions/chatActions";
 
-const page = () => {
+const Page = () => {
   const { chats } = useSelector((state) => state.chat);
   const { selectedChat } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
@@ -51,4 +51,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

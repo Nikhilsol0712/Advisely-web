@@ -11,7 +11,7 @@ import {
   getUserByIdFailure,
 } from "../../Actions/userActions";
 
-const page = () => {
+const Page = () => {
   const { AllSme } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -78,4 +78,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -46,7 +46,7 @@ import AllChats from "../components/Allchats/AllChats";
 import SingleChat from "../components/SingleChat/SingleChat";
 import sessionServices from "../services/sessionService";
 
-const page = () => {
+const Page = () => {
   const isMobile = useWindowResize();
   const { outletName } = useSelector((state) => state.outlet);
   const { selectedSubCategory } = useSelector((state) => state.subCategory);
@@ -230,4 +230,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -11,7 +11,7 @@ const AllChats = ({ sortedChats }) => {
       const selectedChatData = sortedChats[0];
       dispatch(selectedChat(selectedChatData));
     }
-  }, []);
+  }, [dispatch, sortedChats]);
 
   return (
     <div className="no-scrollbar  rounded mt-2 w-full  h-screen flex flex-col overflow-y-auto gap-2   p-1">

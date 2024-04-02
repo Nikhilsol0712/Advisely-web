@@ -2,8 +2,18 @@
 
 import Image from "next/image";
 import { dynamicUI } from "@/app/utils/assets";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 export default function Footer() {
+  const route = useRouter();
+  const { token, userInfo } = useSelector((state) => state.auth);
+
+  const onSignupClick = (e) => {
+    e.preventDefault();
+    route.push("login");
+  };
+
   return (
     <footer className="bg-white">
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
@@ -39,6 +49,7 @@ export default function Footer() {
                   />
 
                   <button
+                    onClick={onSignupClick}
                     style={{ backgroundColor: dynamicUI["COLOR-PRIMARY"] }}
                     className="mt-1 w-full rounded-lg  px-6 py-3 text-sm font-bold uppercase tracking-wide text-white transition-none hover:bg-teal-600 sm:mt-0 sm:w-auto sm:shrink-0"
                   >

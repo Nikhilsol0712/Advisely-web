@@ -96,6 +96,16 @@ export default function Header() {
     route.push("/login");
   };
 
+  const bookMentorClick = () => {
+    if (userToken && userInfo?.userType === "customer") {
+      route.push("/user/book-mentor");
+    } else if (userToken && userInfo?.userType === "SME") {
+      route.push("/mentors");
+    } else {
+      route.push("/login");
+    }
+  };
+
   return (
     <header style={{ zIndex: 999 }} className="bg-white shadow-sm ">
       <nav
@@ -106,7 +116,8 @@ export default function Header() {
           <a href="#" className=" ">
             {/* <span className="sr-only text-black">Your Company</span> */}
             <img
-              className="h-full  bg-red-200 w-16 ml-14"
+              onClick={() => route.push("/")}
+              className="h-full  bg-white w-16 ml-14"
               src="/logo.jpeg"
               alt=""
             />
@@ -126,13 +137,15 @@ export default function Header() {
         {!userToken && (
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
             <a
-              href="#"
+              onClick={bookMentorClick}
+              href=""
               className="text-sm font-semibold leading-6 text-gray-900"
             >
               Book a mentor
             </a>
             <a
-              href="#"
+              onClick={bookMentorClick}
+              href=""
               className="text-sm font-semibold leading-6 text-gray-900"
             >
               Find Advisor

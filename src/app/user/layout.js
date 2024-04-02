@@ -3,7 +3,7 @@ import React from "react";
 import Sidebar from "../components/Sidebar/Sidebar";
 import useWindowResize from "@/Hooks/useWindowResize";
 
-const layout = ({ children }) => {
+const Layout = ({ children }) => {
   const isMobile = useWindowResize();
 
   return (
@@ -21,4 +21,4 @@ const layout = ({ children }) => {
   );
 };
 
-export default layout;
+export default Layout;

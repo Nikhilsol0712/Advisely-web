@@ -6,7 +6,7 @@ export default function HomeFlow() {
     <div className="w-full h-full flex justify-center items-center">
       <div className="w-10/12 flex flex-row justify-evenly gap-4 rounded-lg border border-slate-400 mt-16 mb-9">
         <div className=" p-10 flex flex-col items-center w-2/3">
-          <Image width={200} height={100} src="/images/sinupIcon.jpg" />
+          <Image width={200} height={100} alt="" src="/images/sinupIcon.jpg" />
           <p
             style={{ color: dynamicUI["COLOR-PRIMARY"] }}
             className="text-center mt-7"
@@ -15,7 +15,7 @@ export default function HomeFlow() {
           </p>
         </div>
         <div className=" p-10 flex flex-col items-center w-2/3">
-          <Image width={200} height={100} src="/images/scheduleIcon.jpg" />
+          <Image width={200} height={100} alt="" src="/images/scheduleIcon.jpg" />
           <p
             style={{ color: dynamicUI["COLOR-PRIMARY"] }}
             className="text-center mt-7"
@@ -25,7 +25,7 @@ export default function HomeFlow() {
           </p>
         </div>
         <div className=" p-10 flex flex-col items-center w-2/3">
-          <Image width={300} height={200} src="/images/mentorshipIcon.jpg" />
+          <Image width={300} height={200} alt="" src="/images/mentorshipIcon.jpg" />
           <p
             style={{ color: dynamicUI["COLOR-PRIMARY"] }}
             className="text-center mt-10"

@@ -1,5 +1,11 @@
 "use client";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 import Message from "../Message/Message";
 import { SERVER, dynamicUI } from "../../utils/assets";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,7 +40,10 @@ const SingleChat = ({ selectedChat }) => {
 
   const [autoSessionExpired, setAutoSessionExpired] = useState(false);
   const [leaveChat, setLeaveChat] = useState(false);
-  const combinedMessages = [...messageHistory, ...messages];
+  const combinedMessages = useMemo(() => {
+    return [...messageHistory, ...messages];
+  }, [messageHistory, messages]);
+
   const [chatStatus, setChatStatus] = useState({});
   const socket = io(SERVER);
   const loadCurrentSession = async (sessionId) => {
@@ -89,7 +98,7 @@ const SingleChat = ({ selectedChat }) => {
     return () => {
       socket.disconnect();
     };
-  }, [selectedChat?._id]);
+  }, [loadAllMessages, selectedChat?.session?._id, socket, userInfo._id]);
 
   useEffect(() => {
     const checkSessionAndChatStatus = async () => {
@@ -150,7 +159,7 @@ const SingleChat = ({ selectedChat }) => {
       <div className=" flex flex-row px-2  bg-white border-b-2 rounded-b  w-full h-16">
         <div className="flex p-2 flex-row items-center gap-2">
           <img
-           alt=""
+            alt=""
             className="rounded-full h-10 w-10  "
             src={`${selectedChat?.sme?.profilePic}`}
           />

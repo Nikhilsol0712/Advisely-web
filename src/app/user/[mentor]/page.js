@@ -35,7 +35,7 @@ const Mentor = ({ params }) => {
     if (params && params.mentor) {
       fetchUserDetailById(params.mentor);
     }
-  }, [params]);
+  }, [params?.mentor]);
 
   return (
     <div
