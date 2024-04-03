@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 const Page = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
 
+  const [formData, setFormData] = useState({});
+
   console.log("userInfo====", userInfo);
   return (
     <div className="flex w-full   mt-14 flex-col ">
@@ -36,7 +38,18 @@ const Page = () => {
 
       {/* lower section */}
       <div className=" bg-white mt-2 flex justify-center w-full">
-        <form className="p-3 w-full bg-white text-black rounded-lg"></form>
+        <form className="flex flex-row justify-between gap-4 p-3 w-full text-black rounded-lg ">
+          {/* left section */}
+          <div className="bg-white w-1/2 rounded-lg shadow p-4">
+            <span className="text-sm text-gray-500">Personal Information</span>
+            <div>
+              <input type="text" name="firstName" />
+            </div>
+          </div>
+
+          {/* right section */}
+          <div className="bg-white w-1/2 rounded-lg shadow p-4">dd</div>
+        </form>
       </div>
     </div>
   );

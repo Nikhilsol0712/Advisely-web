@@ -118,7 +118,8 @@ const SingleChat = ({ selectedChat }) => {
     checkSessionAndChatStatus();
   }, [leaveChat, chatStatus, selectedChat?.session?._id]);
 
-  const sendMessage = () => {
+  const sendMessage = (e) => {
+    e.preventDefault();
     if (
       messageText &&
       currentSession.status === "accepted"
@@ -230,20 +231,20 @@ const SingleChat = ({ selectedChat }) => {
       </div>
 
       {/* send message section */}
-      <div className="border-t-2 rounded-t flex justify-evenly  mb-4 text-black w-full p-1 py-2">
+      <form
+        onSubmit={sendMessage}
+        className="border-t-2 rounded-t flex justify-evenly  mb-4 text-black w-full p-1 py-2"
+      >
         <input
           className="pl-4 text-sm w-5/6 border rounded h-8 "
           placeholder="Write your message here"
           value={messageText}
           onChange={(event) => setMessageText(event.target.value)}
         />
-        <button
-          onClick={sendMessage}
-          className="w-20 bg-purple-700 text-white rounded"
-        >
+        <button type="submit" className="w-20 bg-purple-700 text-white rounded">
           send
         </button>
-      </div>
+      </form>
     </div>
   );
 };

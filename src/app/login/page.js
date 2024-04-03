@@ -18,6 +18,7 @@ import {
   loginSchema,
   signupSchema,
 } from "../utils/validations/authValidationSchema";
+import { setCookie } from "cookies-next";
 
 const Login = () => {
   const initialState = {
@@ -34,6 +35,8 @@ const Login = () => {
   const [formData, setFormData] = useState(initialState);
   const [selected, setSelected] = useState(null);
   const [errors, setErrors] = useState({});
+  const [loginEmailPassError, setLoginEmailPassError] = useState("");
+  const [signupEmailPassError, setSignupEmailPassError] = useState("");
 
   const route = useRouter();
   const dispatch = useDispatch();
@@ -59,6 +62,8 @@ const Login = () => {
   };
 
   const handleChange = (e) => {
+    setLoginEmailPassError("");
+    setSignupEmailPassError("");
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -85,8 +90,12 @@ const Login = () => {
     try {
       await signupSchema.validate(formData, { abortEarly: false });
       const response = await authServices.registerUser(formData);
+      console.log("response from signup====", response);
       if (response.success === true) {
         setActiveForm("login");
+      }
+      if (response.success === false) {
+        setSignupEmailPassError(response.message);
       }
     } catch (err) {
       if (err.name === "ValidationError") {
@@ -106,11 +115,17 @@ const Login = () => {
 
       dispatch(userLoginRequest());
       const response = await authServices.signinUSer(formData);
+      console.log("response from signin-====", response);
+
       if (
         response.success === true &&
         response?.userData?.userType === "customer"
       ) {
         dispatch(userLoginSuccess(response));
+
+        setCookie("x-access-token", response.token);
+        setCookie("userType", response?.userData?.userType);
+
         dispatch(setToken(response.token));
         dispatch(setUserType(response?.userData?.userType));
         localStorage.setItem("x-access-token", response.token);
@@ -118,6 +133,9 @@ const Login = () => {
         route.push("/user/home");
       }
       if (response.success === true && response?.userData?.userType === "SME") {
+        setCookie("x-access-token", response.token);
+        setCookie("userType", response?.userData?.userType);
+
         dispatch(userLoginSuccess(response));
         dispatch(setToken(response.token));
         dispatch(setUserType(response?.userData?.userType));
@@ -125,6 +143,9 @@ const Login = () => {
         localStorage.setItem("userType", response?.userData?.userType);
 
         route.push("mentors");
+      }
+      if (response.success === false) {
+        setLoginEmailPassError(response.message);
       }
     } catch (err) {
       if (err.name === "ValidationError") {
@@ -153,7 +174,9 @@ const Login = () => {
             <div
               onClick={() => toggleForm("login")}
               className={`font-semibold rounded-lg flex hover:cursor-pointer items-center justify-center w-52 h-10  text-black   ${
-                activeForm === "login" ? "bg-purple-200" : ""
+                activeForm === "login"
+                  ? "bg-[rgba(249,180,8,0.6)] text-white"
+                  : ""
               }`}
             >
               Log In
@@ -162,7 +185,7 @@ const Login = () => {
               onClick={() => toggleForm("signup")}
               className={`font-semibold rounded-xl flex hover:cursor-pointer items-center justify-center w-52 h-10 text-black   ${
                 activeForm === "signup"
-                  ? "bg-purple-950 text-white"
+                  ? "bg-[rgb(151,122,241)] text-white"
                   : "active:bg-white"
               }`}
             >
@@ -174,7 +197,12 @@ const Login = () => {
         <div className="flex-auto p-4">
           {/* <div role="form text-left"> */}
           {activeForm === "login" && (
-            <form>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSignin(e);
+              }}
+            >
               <div className={`${errors.email ? "" : "mb-4"}`}>
                 <input
                   type="email"
@@ -210,6 +238,10 @@ const Login = () => {
                     {errors.password}
                   </p>
                 )}
+
+                <p className="  text-xs mt-2 ml-1 flex items-start justify-center text-start text-red-500">
+                  {loginEmailPassError}
+                </p>
               </div>
               {/* <div className="min-h-6 mb-0.5 block pl-12">
                 <input
@@ -227,12 +259,9 @@ const Login = () => {
               </div> */}
               <div className="text-center">
                 <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSignin(e);
-                  }}
-                  style={{ backgroundColor: "#5D3587" }}
-                  className="inline-block h-10 w-full px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all  border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md  bg-x-25   to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white"
+                  type="submit"
+                  style={{ backgroundColor: "rgb(151,122,241)" }}
+                  className="inline-block h-10 w-full px-6 py-3 mt-3 mb-2 font-bold text-center text-white uppercase align-middle transition-all  border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md  bg-x-25   to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white"
                 >
                   Sign-in
                 </button>
@@ -242,7 +271,12 @@ const Login = () => {
 
           {/* ============== signup form ============== */}
           {activeForm === "signup" && (
-            <form>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSignup(e);
+              }}
+            >
               <div
                 className={`${
                   errors.firstName && errors.lastName ? "" : "mb-4"
@@ -299,7 +333,12 @@ const Login = () => {
                   onChange={(e) => handleChange(e)}
                   value={formData.email}
                   required
-                  className={` text-sm h-10 focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow`}
+                  className={`${
+                    signupEmailPassError ===
+                    "Email is already taken. Please choose another one."
+                      ? "border border-red-500  shadow-inner  shadow-red-100"
+                      : ""
+                  } text-sm h-10 focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow`}
                   placeholder="Email"
                   aria-label="Email"
                   aria-describedby="email-addon"
@@ -335,7 +374,12 @@ const Login = () => {
                   onChange={(e) => handleChange(e)}
                   value={formData.phoneNumber}
                   required
-                  className="text-sm h-10  focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
+                  className={`${
+                    signupEmailPassError ===
+                    "Phone number is already registered. Please use a different one."
+                      ? "border border-red-500  shadow-inner  shadow-red-100"
+                      : ""
+                  } text-sm h-10  focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow`}
                   placeholder="Phone Number"
                   aria-label="phoneNumber"
                   aria-describedby="phoneNumber-addon"
@@ -346,7 +390,7 @@ const Login = () => {
                   </p>
                 )}
               </div>
-              <div className="mb-4 flex justify-between">
+              <div className=" flex justify-between">
                 <input
                   type="text"
                   name="zipcode"
@@ -380,14 +424,14 @@ const Login = () => {
                 /> */}
               </div>
 
+              <p className=" text-xs mt-2 ml-1 flex items-start justify-center text-start text-red-500">
+                {signupEmailPassError}
+              </p>
               <div className="text-center">
                 <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSignup(e);
-                  }}
-                  style={{ backgroundColor: "#5D3587" }}
-                  className="inline-block h-10 w-full px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all  border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md  bg-x-25   to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white"
+                  type="submit"
+                  style={{ backgroundColor: "rgb(151,122,241)" }}
+                  className="inline-block h-10 w-full px-6 py-3 mt-3 mb-2 font-bold text-center text-white uppercase align-middle transition-all  border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md  bg-x-25   to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white"
                 >
                   Sign-up
                 </button>

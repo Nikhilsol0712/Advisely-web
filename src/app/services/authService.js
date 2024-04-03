@@ -25,12 +25,10 @@ export const authServices = {
   signinUSer: async (data) => {
     try {
       const response = await axiosInstance.post(`${BASE_URL}/signin`, data);
-
+      console.log("response from sss=====", response.data);
       return response.data;
     } catch (error) {
       throw { message: error.response.data };
     }
   },
 };
-
-

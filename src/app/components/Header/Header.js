@@ -27,6 +27,7 @@ import {
 } from "../../token";
 import { useSelector, useDispatch } from "react-redux";
 import { setToken, setUserType } from "../../Actions/authActions";
+import { deleteCookie } from "cookies-next";
 
 const products = [
   {
@@ -89,6 +90,8 @@ export default function Header() {
   };
 
   const onLogout = () => {
+    deleteCookie("x-access-token");
+    deleteCookie("userType");
     removeUserToken();
     removeUserType();
     dispatch(setToken(null));
@@ -151,21 +154,15 @@ export default function Header() {
             >
               Find Advisor
             </a>
-            <a
-              href="#"
-              className="text-sm font-semibold leading-6 text-gray-900"
-            >
-              Company
-            </a>
           </Popover.Group>
         )}
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <div className="flex w-64 justify-between items-center flex-row">
-            {userToken && (
+          <div className="flex w-80 justify-end items-center flex-row">
+            {userToken && userInfo?.userType === "customer" && (
               <div
                 onClick={() => route.push("/user/book-mentor")}
-                className="transform hover:scale-105 transition-transform duration-300 font-semibold  leading-6 p-2 rounded-md bg-purple-300 text-white hover:bg-purple-700 hover:cursor-pointer"
+                className="transform hover:scale-105 mr-5 transition-transform duration-300 font-semibold  leading-6 p-2 rounded-md bg-purple-300 text-white hover:bg-purple-700 hover:cursor-pointer"
               >
                 Book a mentor
               </div>
@@ -174,7 +171,7 @@ export default function Header() {
             {userToken && (
               <div
                 // onClick={() => route.push("/user/profile")}
-                className=" uppercase hover:cursor-pointer rounded-full flex text-center items-center justify-center h-8 p-1 w-8 bg-red-400"
+                className=" uppercase mr-5 hover:cursor-pointer  rounded-full flex text-center items-center justify-center h-8 p-1 w-8 bg-red-400"
               >
                 {userInfo?.firstName[0]}
                 {userInfo?.lastName[0]}
@@ -183,7 +180,7 @@ export default function Header() {
 
             <div
               onClick={userToken ? onLogout : handleLogin}
-              className=" flex border  hover:cursor-pointer border-gray-400 p-1 px-2 text-xs font-medium text-black hover:shadow items-center rounded-md "
+              className=" flex border mr-5  hover:cursor-pointer border-gray-400 p-1 px-2 text-xs font-medium text-black hover:shadow items-center rounded-md "
             >
               {userToken !== null ? "Logout" : "Login"}
             </div>

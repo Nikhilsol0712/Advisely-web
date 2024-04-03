@@ -1,6 +1,9 @@
-
 import { Poppins } from "next/font/google";
 import axios from "axios";
+// export const BASE_URL = "http://localhost:5000/api/v1";
+// export const IMAGE_SOURCE = "https://advisely-backend.onrender.com/uploads/";
+// export const SERVER = "http://localhost:5000/";
+
 export const BASE_URL = "https://advisely-backend.onrender.com/api/v1";
 export const IMAGE_SOURCE = "https://advisely-backend.onrender.com/uploads/";
 export const SERVER = "https://advisely-backend.onrender.com/";
@@ -40,4 +43,3 @@ export const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-

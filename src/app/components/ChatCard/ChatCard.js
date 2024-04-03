@@ -21,11 +21,22 @@ const ChatCard = ({ chatData }) => {
           src={`${chatData?.sme?.profilePic}`}
         />
       </div>
-      <div className="flex ml-1 flex-col justify-center">
+      <div className="flex  ml-1 flex-col justify-center">
         <span className="text-sm font-medium">
           {chatData?.sme?.firstName} {chatData?.sme?.lastName}
         </span>
-        <span className="text-xs">Latest message appears here....</span>
+        <span className="text-xs">
+          {chatData.messages.length > 0
+            ? chatData.messages[chatData.messages.length - 1].text
+                .split(" ")
+                .slice(0, 18)
+                .join(" ") +
+              (chatData.messages[chatData.messages.length - 1].text.split(" ")
+                .length > 18
+                ? "..."
+                : "")
+            : "No messages available"}
+        </span>
       </div>
       <div className="px-1 ">
         <span className="text-[0.4rem]">5:30PM</span>

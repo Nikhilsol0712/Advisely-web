@@ -15,9 +15,9 @@ import {
 } from "./Actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import userServices from "./services/userService";
+import { motion } from "framer-motion";
 
 export default function Home() {
-
   const route = useRouter();
   const containerRef = useRef(null);
   const dispatch = useDispatch();
@@ -74,6 +74,7 @@ export default function Home() {
             {AllSme.map((sme, index) => (
               <ExpetsCard smeDetail={sme} key={index} />
             ))}
+            
           </div>
         </div>
         <div className="mt-10">
